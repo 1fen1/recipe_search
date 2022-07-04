@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {font-family: Arial;}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+/* стили для label */
+.tabcontent label {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+/* стили для input */
+.tabcontent input {
+  display: block;
+  width: 30%;
+  height: calc(2.25rem + 2px);
+  padding: 0.1rem 0.75rem;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #bdbdbd;
+  border-radius: 0.25rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.tabcontent button {
+  background-color: #FFFFFF;
+  border: 1px solid #222222;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #222222;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  margin: 0;
+  outline: none;
+  padding: 13px 23px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  touch-action: manipulation;
+  transition: box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s;
+  user-select: none;
+  -webkit-user-select: none;
+  width: auto;
+}
+
+
+.tabcontent button:focus-visible {
+  box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
+  transition: box-shadow .2s;
+}
+
+.tabcontent button:active {
+  background-color: #F7F7F7;
+  border-color: #000000;
+  transform: scale(.96);
+}
+
+.tabcontent button:disabled {
+  border-color: #DDDDDD;
+  color: #DDDDDD;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+* {box-sizing: border-box}
+
+/* Container needed to position the overlay. Adjust the width as needed */
+.recipe {
+  position: relative;
+  margin: 5px;
+  border: 1px solid #ccc;
+  float: left;
+  width: 50%;
+  max-width: 300px;
+}
+
+/* Make the image to responsive */
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* The overlay effect - lays on top of the container and over the image */
+.overlay {
+  position: absolute;
+  bottom: 0;
+  background: rgb(0, 0, 0);
+  background: rgba(0, 0, 0, 0.5); /* Black see-through */
+  color: #f1f1f1;
+  width: 100%;
+  transition: .5s ease;
+  opacity:0;
+  color: white;
+  font-size: 20px;
+  padding: 20px;
+  text-align: center;
+}
+
+/* When you mouse over the container, fade in the overlay title */
+.recipe:hover .overlay {
+  opacity: 1;
+}
+
+</style>
+</head>
+<body>
+
+  <script src="scripts.js" defer></script>
+
+  <!-- Tab links -->
+  <div class="tab">
+    <button class="tablink" onclick="openTab(event, 'recipeSearch')">Поиск по названию рецепта</button>
+    <button class="tablink" onclick="openTab(event, 'ingredientSearch')">Поиск по ингредиентам</button>
+  </div>
+
+  <!-- Tab content -->
+  <div id="recipeSearch" class="tabcontent">
+    <h3>Введите название блюда</h3>
+    <input type="text" id="recipeName" placeholder="Брауни">
+    <br>
+    <div class="sort-select">
+      Сортировать по:
+      <select name="sort" id="recipeSort" onchange="">
+        <option selected="" value="name">Названию рецепта</option>
+        <option value="accessibility">Доступности</option>
+        <option value="time">Времени приготовления</option>
+        <option value="calories">Количеству калорий</option>
+      </select>
+    </div>
+    <br>
+    <button class="search" onclick="getRecipesByName()">Найти рецепты</button>
+  </div>
+
+  <div id="ingredientSearch" class="tabcontent">
+    <h3>Введите ингредиенты</h3>
+    <label for="ingredientWant">Желаемые ингредиенты:</label>
+    <input type="text" id="ingredientWant" placeholder="молоко;шоколад">
+    <br>
+    <label for="ingredientExcept">Исключить ингредиенты:</label>
+    <input type="text" id="ingredientExcept" placeholder="орех">
+    <br>
+    <div class="sort-select">
+  		Сортировать по:
+    	<select name="sort" id="ingredientSort" onchange="">
+   	 		<option selected="" value="name">Названию рецепта</option>
+        	<option value="avail">Доступности</option>
+        	<option value="time">Времени приготовления</option>
+        	<option value="cals">Количеству калорий</option>
+    	</select>
+  	</div>
+    <br>
+  	<button class="search" onclick="getRecipes()">Найти рецепты</button>
+  </div>
+
+  <div id="recipes">
+
+  </div>
+
+  <script>
+    function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+  }
+  </script>
+  
+</body>
+</html>

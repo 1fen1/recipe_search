@@ -1,0 +1,16 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "ed0be1e9-7bb6-41e5-a222-a8918bee0724": {
+      "ProjectGuid": "ed0be1e9-7bb6-41e5-a222-a8918bee0724",
+      "DisplayName": "DBUpload",
+      "ColorIndex": 0
+    },
+    "0bf1dfcb-d8a8-4d72-b535-eda3278d7590": {
+      "ProjectGuid": "0bf1dfcb-d8a8-4d72-b535-eda3278d7590",
+      "DisplayName": "FoodAPI",
+      "ColorIndex": 1
+    }
+  },
+  "NextColorIndex": 2
+}
